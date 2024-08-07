@@ -1,0 +1,36 @@
+/* src/App.css */
+
+.app-container {
+  margin-left: 0;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.app-container.shifted {
+  margin-left: 200px;
+}
+
+.content {
+  padding: 20px;
+}
+
+/* 按钮样式 */
+.toggle-button {
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #007bff; /* 按钮颜色 */
+}
+
+.button {
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #007bff; /* 按钮颜色 */
+  transition: color 0.2s ease;
+}
+
+.button:hover {
+  color: #0056b3;
+}
