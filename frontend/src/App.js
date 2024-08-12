@@ -1,6 +1,7 @@
 // src/App.js
 import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
+import Calendar from './Calendar';
 import './App.css'; // 导入CSS文件
 
 const AppContainer = ({ isSidebarOpen, children }) => (
@@ -17,12 +18,15 @@ const Content = () => (
 );
 
 function App() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
     <AppContainer isSidebarOpen={isSidebarOpen}>
       <Sidebar onToggle={setIsSidebarOpen} />
-      <Content />
+      {/* <Content /> */}
+      <div>
+        <Calendar />
+      </div>
     </AppContainer>
   );
 }

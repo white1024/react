@@ -4,7 +4,7 @@ import { FaBars, FaTimes } from 'react-icons/fa';
 import './Sidebar.css'; // 导入CSS文件
 
 const Sidebar = ({ onToggle }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
