@@ -20,5 +20,6 @@ export default function reducers(stateTime, action){
     }
   
     console.log(mmt.format("YYYY-MM-DD"));
+    console.log(mmt.format("YYYY-MM-DD"));
     return mmt.format("YYYY-MM-DD");
   }
