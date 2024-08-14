@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Sidebar from './Sidebar';
+import { useUserContext } from '../contexts/UserContext';
+import Login from '../pages/Login';
 
 const LayoutWrapper = styled.div`
   display: grid;
@@ -49,6 +51,17 @@ function Layout({ children }) {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+  const { user, userData, setUserData, deleteUser } = useUserContext();
+  const [isLogin, setIsLogin] = useState(true);
+
+  if (!user) {
+    return (
+      <div>
+        <Login />
+      </div>
+    );
+  }
 
   return (
     <LayoutWrapper sidebarOpen={sidebarOpen}>

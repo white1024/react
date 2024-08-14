@@ -2,8 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Layout from './components/Layout';
 import MainContent from './components/MainContent';
-import { createGlobalStyle } from 'styled-components';
+import { UserProvider } from './contexts/UserContext';
 
+import { createGlobalStyle } from 'styled-components';
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -20,11 +21,13 @@ function App() {
   return (
     <>
     <GlobalStyle />
-    <Router>
-      <Layout>
-        <MainContent />
-      </Layout>
-    </Router>
+      <Router>
+        <UserProvider>
+        <Layout>
+          <MainContent />
+        </Layout>
+        </UserProvider>
+      </Router>
     </>
   );
 }
