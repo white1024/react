@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useUserContext } from '../contexts/UserContext';
 
 const LoginContainer = styled.div`
   display: flex;
@@ -74,17 +75,71 @@ const RegisterButton = styled(Button)`
   }
 `;
 
+const ModalBackdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalContent = styled.div`
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+`;
+
+const ModalButton = styled(Button)`
+  margin-top: 1rem;
+  width: auto;
+  padding: 0.5rem 1rem;
+`;
+
+const Modal = ({ message, onClose }) => (
+  <ModalBackdrop>
+    <ModalContent>
+      <p>{message}</p>
+      <ModalButton onClick={onClose}>確定</ModalButton>
+    </ModalContent>
+  </ModalBackdrop>
+);
+
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const { login, register } = useUserContext();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log('Login:', username, password);
+    try {
+      await login(username, password);
+      console.log('登入成功:', username, password);
+    } catch (err) {
+      setModalMessage('登入失敗：用戶名或密碼錯誤');
+    }
   };
 
-  const handleRegister = () => {
-    console.log('Open registration modal');
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      await register(username, password);
+      setUsername('');
+      setPassword('');
+      console.log('註冊成功:', username, password);
+    } catch (err) {
+      setModalMessage('註冊失敗');
+    }
+  };
+
+  const closeModal = () => {
+    setModalMessage('');
   };
 
   return (
@@ -111,6 +166,7 @@ const Login = () => {
           註冊新帳號
         </RegisterButton>
       </LoginForm>
+      {modalMessage && <Modal message={modalMessage} onClose={closeModal} />}
     </LoginContainer>
   );
 };

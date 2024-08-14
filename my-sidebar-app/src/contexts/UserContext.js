@@ -8,6 +8,16 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
 
+  const register = async (username, password) => {
+    try {
+      const response = await axios.post('http://localhost:5000/register', { username, password });
+      const { token } = response.data;
+      localStorage.setItem('token', token);
+    } catch (error) {
+        throw error.response?.data.message;
+    }
+  };
+
   const login = async (username, password) => {
     try {
       const response = await axios.post('http://localhost:5000/login', { username, password });
@@ -16,7 +26,7 @@ export const UserProvider = ({ children }) => {
       setUser({ username });
       await fetchUserData(token);
     } catch (error) {
-      throw error.response.data.message;
+        throw error.response?.data.message;
     }
   };
 
@@ -62,7 +72,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout, userData, setUserData, deleteUser  }}>
+    <UserContext.Provider value={{ user, register, login, logout, userData, setUserData, deleteUser  }}>
       {children}
     </UserContext.Provider>
   );

@@ -5,6 +5,7 @@ import { Tooltip } from 'react-tooltip';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import ContactsIcon from '@mui/icons-material/Contacts';
+import SettingIcon from '@mui/icons-material/Settings';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
@@ -89,6 +90,12 @@ function Sidebar({ open, onToggle }) {
           <NavLink to="/contact" data-tooltip-id="sidebar-tooltip" data-tooltip-content="聯絡我們">
             <Icon><ContactsIcon /></Icon>
             <Label open={open}>聯絡我們</Label>
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink to="/setting" data-tooltip-id="sidebar-tooltip" data-tooltip-content="設定">
+            <Icon><SettingIcon /></Icon>
+            <Label open={open}>設定</Label>
           </NavLink>
         </NavItem>
       </NavList>

@@ -15,12 +15,37 @@ const LayoutWrapper = styled.div`
   min-height: 100vh;
   transition: all 0.3s ease-in-out;
 `;
-
+/*
 const Header = styled.header`
   grid-area: header;
   background: #333;
   color: white;
   padding: 1rem;
+`;
+*/
+const HeaderContainer = styled.header`
+  grid-area: header;
+  background: #333;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+`;
+
+const Button = styled.button`
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
 `;
 
 const SidebarWrapper = styled.aside`
@@ -47,13 +72,11 @@ const Footer = styled.footer`
 
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { user, logout } = useUserContext();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
-
-  const { user, userData, setUserData, deleteUser } = useUserContext();
-  const [isLogin, setIsLogin] = useState(true);
 
   if (!user) {
     return (
@@ -65,9 +88,10 @@ function Layout({ children }) {
 
   return (
     <LayoutWrapper sidebarOpen={sidebarOpen}>
-      <Header>
-        <h1>我的應用</h1>
-      </Header>
+      <HeaderContainer>
+        <h1>我的應用 {user.username}</h1>
+        <Button onClick={logout}>登出</Button>
+      </HeaderContainer>
       <SidebarWrapper open={sidebarOpen}>
         <Sidebar open={sidebarOpen} onToggle={toggleSidebar} />
       </SidebarWrapper>
