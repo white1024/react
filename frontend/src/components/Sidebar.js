@@ -1,31 +1,44 @@
-// src/Sidebar.js
 import React, { useState } from 'react';
-import { FaBars, FaTimes } from 'react-icons/fa';
-import './Sidebar.css'; // 导入CSS文件
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
-const Sidebar = ({ onToggle }) => {
-  const [isOpen, setIsOpen] = useState(true);
+const SidebarWrapper = styled.div`
+  width: ${props => props.isExpanded ? '200px' : '50px'};
+  height: 100vh;
+  background-color: #f0f0f0;
+  transition: width 0.3s ease;
+`;
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-    onToggle(!isOpen); // 通知父组件侧边栏状态变化
-  };
+const ToggleButton = styled.button`
+  width: 100%;
+  padding: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+
+const NavLink = styled(Link)`
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+`;
+
+const Sidebar = () => {
+  const [isExpanded, setIsExpanded] = useState(true);
 
   return (
-    <>
-      <button className="button toggle-button" onClick={toggleSidebar}>
-        <FaBars />
-      </button>
-      <div className={`sidebar-container ${isOpen ? 'open' : ''}`}>
-
-        <div className="sidebar-content">
-          <a className="sidebar-link" href="#home">Home</a>
-          <a className="sidebar-link" href="#about">About</a>
-          <a className="sidebar-link" href="#services">Services</a>
-          <a className="sidebar-link" href="#contact">Contact</a>
-        </div>
-      </div>
-    </>
+    <SidebarWrapper isExpanded={isExpanded}>
+      <ToggleButton onClick={() => setIsExpanded(!isExpanded)}>
+        {isExpanded ? '<<' : '>>'}
+      </ToggleButton>
+      {isExpanded && (
+        <>
+          <NavLink to="/travel-planner">旅遊規劃</NavLink>
+          {/* 添加更多導航鏈接 */}
+        </>
+      )}
+    </SidebarWrapper>
   );
 };
 

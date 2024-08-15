@@ -1,8 +1,8 @@
 // About.js
 import React from 'react';
-import CoolCard from '../components/CoolCard';
-import FlipCard from '../components/FlipCard';
-import WaveBackground from '../components/WaveBackground';
+import CoolCard from '../components/testing/CoolCard';
+import FlipCard from '../components/testing/FlipCard';
+import WaveBackground from '../components/testing/WaveBackground';
 /*
 function About() {
   return <h1>關於我們</h1>;
@@ -11,7 +11,7 @@ function About() {
 const About = () => {
   return (
     <div>
-      <WaveBackground />
+      <CoolCard />
     </div>
   );
 }

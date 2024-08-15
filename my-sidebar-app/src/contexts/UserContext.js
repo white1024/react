@@ -1,5 +1,6 @@
 // contexts/UserContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import webapi from '../utils/WebAPI';
 import axios from 'axios';
 
 const UserContext = createContext(null);
