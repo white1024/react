@@ -20,11 +20,11 @@ const App = () => {
           <Route
             path="/travel-planner"
             element={
-              <ProtectedRoute>
+              //<ProtectedRoute>
                 <Layout>
                   <TravelPlanner />
                 </Layout>
-              </ProtectedRoute>
+              //</ProtectedRoute>
             }
           />
           <Route path="/" element={<Navigate to="/login" />} />

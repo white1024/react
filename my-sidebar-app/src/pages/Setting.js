@@ -1,7 +1,7 @@
 // Setting.js
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { useUserContext } from '../contexts/UserContext';
+import { AuthContext } from "context";
 
 const Button = styled.button`
   width: 100%;
@@ -28,7 +28,7 @@ const DeleteButton = styled(Button)`
 `;
 
 const Setting = () => {
-  const { deleteUser } = useUserContext();
+  const { deleteUser } = useContext(AuthContext);
 
   const handleDeleteUser = async () => {
     if (window.confirm('確定要刪除您的帳戶嗎？此操作不可逆。')) {

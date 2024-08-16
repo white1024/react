@@ -57,11 +57,11 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
+      /*const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
         username,
         password
-      });
-      localStorage.setItem('token', response.data.access_token);
+      });*/
+      //localStorage.setItem('token', response.data.access_token);
       navigate('/travel-planner');
     } catch (error) {
       console.error('Login failed', error);

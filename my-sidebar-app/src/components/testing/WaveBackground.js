@@ -1,5 +1,5 @@
 import React from 'react';
-import './WaveBackground.css';
+import 'components/testing/WaveBackground';
 
 const WaveBackground = () => {
   return (

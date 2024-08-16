@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './CoolCard.css';
+import 'components/testing/CoolCard.css';
 
 const CoolCard = ({ title, content, image }) => {
   const [isHovered, setIsHovered] = useState(false);

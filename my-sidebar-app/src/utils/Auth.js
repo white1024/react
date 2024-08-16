@@ -1,17 +1,15 @@
 // contexts/UserContext.js
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import webapi from '../utils/WebAPI';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { AuthContext } from "context";
+import webapi from 'utils/WebAPI';
 
-const UserContext = createContext(null);
-
-export const UserProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
 
   const register = async (username, password) => {
     try {
-      const response = await axios.post('http://localhost:5000/register', { username, password });
+      const response = await webapi.post('/register', { username, password });
       const { token } = response.data;
       localStorage.setItem('token', token);
     } catch (error) {
@@ -21,7 +19,7 @@ export const UserProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await axios.post('http://localhost:5000/login', { username, password });
+      const response = await webapi.post('/login', { username, password });
       const { token } = response.data;
       localStorage.setItem('token', token);
       setUser({ username });
@@ -39,7 +37,7 @@ export const UserProvider = ({ children }) => {
 
   const fetchUserData = async (token) => {
     try {
-      const response = await axios.get('http://localhost:5000/user_data', {
+      const response = await webapi.get('/user_data', {
         headers: { Authorization: token }
       });
       setUserData(response.data);
@@ -55,6 +53,22 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
+  const verifyToken = async (token) => {
+    try {
+      const response = await webapi.get('/verify-token', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // 如果 token 有效，更新狀態
+      setIsLoggedIn(true);
+      setUser(response.data.user);
+    } catch (error) {
+      console.error('Token verification failed:', error);
+      // 如果 token 無效，清除它
+      localStorage.removeItem('token');
+    }
+  };
+
   const deleteUser = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -62,7 +76,7 @@ export const UserProvider = ({ children }) => {
     }
 
     try {
-      await axios.delete('http://localhost:5000/delete_user', {
+      await webapi.delete('/delete_user', {
         headers: { Authorization: token }
       });
       logout(); // 刪除用戶後登出
@@ -73,10 +87,8 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, register, login, logout, userData, setUserData, deleteUser  }}>
+    <AuthContext.Provider value={{ user, userData, register, login, logout, setUserData, deleteUser  }}>
       {children}
-    </UserContext.Provider>
+    </AuthContext.Provider>
   );
 };
-
-export const useUserContext = () => useContext(UserContext);

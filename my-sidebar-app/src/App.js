@@ -1,10 +1,13 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import Layout from './components/Layout';
-import MainContent from './components/MainContent';
-import { UserProvider } from './contexts/UserContext';
-
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from 'utils/Auth';
 import { createGlobalStyle } from 'styled-components';
+import Login from 'pages/Login';
+import Register from 'pages/Register';
+import ProtectedRoute from "utils/ProtectedRoute.js";
+import Layout from 'components/Layout';
+import MainContent from 'components/MainContent';
+
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -22,11 +25,23 @@ function App() {
     <>
     <GlobalStyle />
       <Router>
-        <UserProvider>
-        <Layout>
-          <MainContent />
-        </Layout>
-        </UserProvider>
+        <AuthProvider>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route 
+              path="/*" 
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <MainContent />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<Navigate to="/login" />} />
+          </Routes>
+        </AuthProvider>
       </Router>
     </>
   );

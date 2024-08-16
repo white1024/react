@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { AuthContext } from "context";
 import { useNavigate, Link } from 'react-router-dom';
 
-const LoginContainer = styled.div`
+const RegisterContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -12,7 +12,7 @@ const LoginContainer = styled.div`
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 `;
 
-const LoginForm = styled.form`
+const RegisterForm = styled.form`
   background: rgba(255, 255, 255, 0.9);
   padding: 2rem;
   border-radius: 15px;
@@ -65,7 +65,19 @@ const LoginButton = styled(Button)`
   }
 `;
 
-const RegisterLink = styled(Link)`
+const RegisterButton = styled(Button)`
+  background-color: transparent;
+  color: #764ba2;
+  border: 2px solid #764ba2;
+  margin-top: 1rem;
+
+  &:hover {
+    background-color: #764ba2;
+    color: white;
+  }
+`;
+
+const LoginLink = styled(Link)`
   margin-top: 10px;
   text-align: center;
   color: #007bff;
@@ -111,21 +123,30 @@ const Modal = ({ message, onClose }) => (
   </ModalBackdrop>
 );
 
-const Login = () => {
+const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [modalMessage, setModalMessage] = useState('');
-  const { login } = useContext(AuthContext);
+  const { register } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+        alert("Passwords don't match");
+        return;
+    }
     try {
-      await login(username, password);
-      console.log('Login Success:', username, password);
-      navigate('/home');
+      await register(username, password);
+      setUsername('');
+      setPassword('');
+      setConfirmPassword('');
+      setModalMessage('Registration successful. Please login.');
+      navigate('/login');
+      console.log('Registration success:', username, password);
     } catch (err) {
-      setModalMessage('Login failed. Please check your credentials.');
+      setModalMessage('Registration failed. Please try again.');
     }
   };
 
@@ -134,8 +155,8 @@ const Login = () => {
   };
 
   return (
-    <LoginContainer>
-      <LoginForm onSubmit={handleLogin}>
+    <RegisterContainer>
+      <RegisterForm onSubmit={handleRegister}>
         <InputWrapper>
           <Input
             type="text"
@@ -154,12 +175,21 @@ const Login = () => {
             required
           />
         </InputWrapper>
-        <LoginButton type="submit">Login</LoginButton>
-      </LoginForm>
+        <InputWrapper>
+          <Input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </InputWrapper>
+        <LoginButton type="submit">Register</LoginButton>
+      </RegisterForm>
       {modalMessage && <Modal message={modalMessage} onClose={closeModal} />}
-      <RegisterLink to="/register">Don't have an account? Register here</RegisterLink>
-    </LoginContainer>
+      <LoginLink to="/login">Already have an account? Login here</LoginLink>
+    </RegisterContainer>
   );
 };
 
-export default Login;
+export default Register;

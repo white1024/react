@@ -9,9 +9,22 @@ const webapi = axios.create({
   }
 });
 
+// 設置 token 的函數
+export const setAuthToken = (token) => {
+  if (token) {
+    webapi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  } else {
+    delete webapi.defaults.headers.common['Authorization'];
+  }
+};
+
 // 添加請求攔截器
 webapi.interceptors.request.use((config) => {
   // 在發送請求之前做些什麼
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
   return config;
 }, (error) => {
   // 對請求錯誤做些什麼

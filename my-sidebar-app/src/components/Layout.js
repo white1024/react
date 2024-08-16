@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import Sidebar from './Sidebar';
-import { useUserContext } from '../contexts/UserContext';
-import Login from '../pages/Login';
+import Sidebar from 'components/Sidebar';
+import { AuthContext } from "context";
 
 const LayoutWrapper = styled.div`
   display: grid;
@@ -10,7 +9,7 @@ const LayoutWrapper = styled.div`
     "header header"
     "sidebar main"
     "footer footer";
-  grid-template-columns: ${props => props.sidebarOpen ? '250px' : '50px'} 1fr;
+  grid-template-columns: ${props => props.sidebaropen ? '250px' : '50px'} 1fr;
   grid-template-rows: auto 1fr auto;
   min-height: 100vh;
   transition: all 0.3s ease-in-out;
@@ -36,15 +35,13 @@ const HeaderContainer = styled.header`
 
 const Button = styled.button`
   padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #FFDEAD;
   }
 `;
 
@@ -58,7 +55,7 @@ const SidebarWrapper = styled.aside`
 
 const Main = styled.main`
   grid-area: main;
-  padding: ${props => props.sidebarOpen ? '1rem 1rem 1rem 2rem' : '1rem'};
+  padding: ${props => props.sidebaropen ? '1rem 1rem 1rem 2rem' : '1rem'};
   transition: padding 0.3s ease-in-out;
 `;
 
@@ -71,31 +68,23 @@ const Footer = styled.footer`
 `;
 
 function Layout({ children }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { user, logout } = useUserContext();
+  const [sidebaropen, setsidebaropen] = useState(true);
+  const { logout } = useContext(AuthContext);
 
   const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+    setsidebaropen(!sidebaropen);
   };
 
-  if (!user) {
-    return (
-      <div>
-        <Login />
-      </div>
-    );
-  }
-
   return (
-    <LayoutWrapper sidebarOpen={sidebarOpen}>
+    <LayoutWrapper sidebaropen={sidebaropen}>
       <HeaderContainer>
-        <h1>我的應用 {user.username}</h1>
-        <Button onClick={logout}>登出</Button>
+        <h1>我的應用</h1>
+        <Button onClick={logout}>Logout</Button>
       </HeaderContainer>
-      <SidebarWrapper open={sidebarOpen}>
-        <Sidebar open={sidebarOpen} onToggle={toggleSidebar} />
+      <SidebarWrapper open={sidebaropen}>
+        <Sidebar open={sidebaropen} onToggle={toggleSidebar} />
       </SidebarWrapper>
-      <Main sidebarOpen={sidebarOpen}>{children}</Main>
+      <Main sidebaropen={sidebaropen}>{children}</Main>
       <Footer>© 2024 我的應用</Footer>
     </LayoutWrapper>
   );
