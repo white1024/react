@@ -33,3 +33,23 @@ def login():
         return jsonify(access_token=access_token), 200
 
     return jsonify({'message': 'Invalid username or password'}), 401
+
+# 驗證 token 路由
+@app.route('/verify-token', methods=['GET'])
+@jwt_required()
+def verify_token():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user).first()
+    return jsonify(user={"username": user.username}), 200
+
+# 刪除使用者路由
+@app.route('/delete-user', methods=['DELETE'])
+@jwt_required()
+def delete_user():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user).first()
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"msg": "User deleted successfully"}), 200
+    return jsonify({"msg": "User not found"}), 404

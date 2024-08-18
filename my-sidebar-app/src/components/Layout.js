@@ -9,7 +9,7 @@ const LayoutWrapper = styled.div`
     "header header"
     "sidebar main"
     "footer footer";
-  grid-template-columns: ${props => props.sidebaropen ? '250px' : '50px'} 1fr;
+  grid-template-columns: ${props => props.$sidebaropen ? '250px' : '50px'} 1fr;
   grid-template-rows: auto 1fr auto;
   min-height: 100vh;
   transition: all 0.3s ease-in-out;
@@ -55,7 +55,7 @@ const SidebarWrapper = styled.aside`
 
 const Main = styled.main`
   grid-area: main;
-  padding: ${props => props.sidebaropen ? '1rem 1rem 1rem 2rem' : '1rem'};
+  padding: ${props => props.$sidebaropen ? '1rem 1rem 1rem 2rem' : '1rem'};
   transition: padding 0.3s ease-in-out;
 `;
 
@@ -76,7 +76,7 @@ function Layout({ children }) {
   };
 
   return (
-    <LayoutWrapper sidebaropen={sidebaropen}>
+    <LayoutWrapper $sidebaropen={sidebaropen}>
       <HeaderContainer>
         <h1>我的應用</h1>
         <Button onClick={logout}>Logout</Button>
@@ -84,7 +84,7 @@ function Layout({ children }) {
       <SidebarWrapper open={sidebaropen}>
         <Sidebar open={sidebaropen} onToggle={toggleSidebar} />
       </SidebarWrapper>
-      <Main sidebaropen={sidebaropen}>{children}</Main>
+      <Main $sidebaropen={sidebaropen}>{children}</Main>
       <Footer>© 2024 我的應用</Footer>
     </LayoutWrapper>
   );

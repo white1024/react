@@ -2,12 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Tooltip } from 'react-tooltip';
-import HomeIcon from '@mui/icons-material/Home';
-import InfoIcon from '@mui/icons-material/Info';
-import ContactsIcon from '@mui/icons-material/Contacts';
-import SettingIcon from '@mui/icons-material/Settings';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { routes } from 'config/routes';
 
 const SidebarContainer = styled.nav`
   height: 100%;
@@ -74,30 +71,14 @@ function Sidebar({ open, onToggle }) {
   return (
     <SidebarContainer open={open}>
       <NavList>
-        <NavItem>
-          <NavLink to="/" data-tooltip-id="sidebar-tooltip" data-tooltip-content="首頁">
-            <Icon><HomeIcon /></Icon>
-            <Label open={open}>首頁</Label>
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink to="/about" data-tooltip-id="sidebar-tooltip" data-tooltip-content="關於我們">
-            <Icon><InfoIcon /></Icon>
-            <Label open={open}>關於我們</Label>
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink to="/contact" data-tooltip-id="sidebar-tooltip" data-tooltip-content="聯絡我們">
-            <Icon><ContactsIcon /></Icon>
-            <Label open={open}>聯絡我們</Label>
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink to="/setting" data-tooltip-id="sidebar-tooltip" data-tooltip-content="設定">
-            <Icon><SettingIcon /></Icon>
-            <Label open={open}>設定</Label>
-          </NavLink>
-        </NavItem>
+        {routes.map((route, index) => (
+          <NavItem key={index}>
+            <NavLink to={"/"+route.path} data-tooltip-id="sidebar-tooltip" data-tooltip-content={route.label}>
+              <Icon>{route.icon}</Icon>
+              <Label open={open}>{route.label}</Label>
+            </NavLink>
+          </NavItem>
+        ))}
       </NavList>
       <ToggleButton 
         onClick={onToggle} 

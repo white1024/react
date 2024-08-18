@@ -1,11 +1,30 @@
 // contexts/UserContext.js
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "context";
 import webapi from 'utils/WebAPI';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const token = localStorage.getItem('token');
+      const storedLoginStatus = localStorage.getItem('isLoggedIn');
+
+      if (token && storedLoginStatus === 'true') {
+        await verifyToken(token);
+      }
+      else {
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
 
   const register = async (username, password) => {
     try {
@@ -20,10 +39,10 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       const response = await webapi.post('/login', { username, password });
-      const { token } = response.data;
+      const token = response.data.access_token;
       localStorage.setItem('token', token);
-      setUser({ username });
-      await fetchUserData(token);
+      localStorage.setItem('isLoggedIn', 'true');
+      setIsLoggedIn(true);
     } catch (error) {
         throw error.response?.data.message;
     }
@@ -31,8 +50,10 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('isLoggedIn');
+    setIsLoggedIn(false);
     setUser(null);
-    setUserData(null);
+    navigate('/login');
   };
 
   const fetchUserData = async (token) => {
@@ -46,26 +67,28 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      fetchUserData(token);
-    }
-  }, []);
+  
 
   const verifyToken = async (token) => {
     try {
       const response = await webapi.get('/verify-token', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
+      //console.log('verify response', response.data)
       // 如果 token 有效，更新狀態
-      setIsLoggedIn(true);
-      setUser(response.data.user);
+      if (response.status === 200) {
+        setIsLoggedIn(true);
+      } else {
+        localStorage.removeItem('token');
+        localStorage.removeItem('isLoggedIn');
+        setIsLoggedIn(false);
+      }
     } catch (error) {
       console.error('Token verification failed:', error);
       // 如果 token 無效，清除它
       localStorage.removeItem('token');
+      localStorage.removeItem('isLoggedIn');
+      setIsLoggedIn(false);
     }
   };
 
@@ -87,7 +110,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, userData, register, login, logout, setUserData, deleteUser  }}>
+    <AuthContext.Provider value={{ user, isLoggedIn, register, login, logout, setUserData, deleteUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -44,7 +44,3 @@ def reorder_locations():
 
     db.session.commit()
     return jsonify({'message': 'Locations reordered successfully'})
-
-@main.route('/test', methods=['GET'])
-def test():
-    return jsonify({"message": "CORS is working"}), 200

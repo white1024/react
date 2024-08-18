@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { AuthContext } from "context";
 import { useNavigate, Link } from 'react-router-dom';
@@ -68,7 +68,7 @@ const LoginButton = styled(Button)`
 const RegisterLink = styled(Link)`
   margin-top: 10px;
   text-align: center;
-  color: #007bff;
+  color: #ffffff;
   text-decoration: none;
 
   &:hover {
@@ -117,6 +117,12 @@ const Login = () => {
   const [modalMessage, setModalMessage] = useState('');
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem('isLoggedIn')) {
+      navigate('/homee');
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
